@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,11 +14,13 @@ public class shooter : MonoBehaviour
     // 1: 攻撃
 
     private float speed = 10f;
+    private float rotation = 200f;
     private InputAction moveAction;
     private InputAction shootAction;
+    private InputAction lookAction;
+    public GameObject bulletPrefab;
 
-
-    public void awake(){
+    public void Awake(){
         
     }
 
@@ -25,6 +28,7 @@ public class shooter : MonoBehaviour
         // "Move" と "Shoot" のリファレンスを探す
         moveAction = InputSystem.actions.FindAction("Move");
         shootAction = InputSystem.actions.FindAction("Shoot");
+        lookAction = InputSystem.actions.FindAction("Look");
         // 画像を idleに
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = idleSprite; 
@@ -43,14 +47,36 @@ public class shooter : MonoBehaviour
         }
     }
 
+    public void LookAtPointer()
+    {
+        Vector2 shooterPosition = new Vector2(transform.position.x,transform.position.y);
+        Vector2 pointerScreenPosition = lookAction.ReadValue<Vector2>();
+        Vector2 pointerPosition = Camera.main.ScreenToWorldPoint(pointerScreenPosition);
+        Vector2 diff = (pointerPosition - shooterPosition).normalized;
+
+        Vector2 rightDir = transform.right.normalized;
+
+
+        float innerProduct = rightDir.x*diff.x + rightDir.y*diff.y;
+
+        if (innerProduct > 0)
+        {
+            transform.Rotate(0, 0, - rotation * Time.deltaTime);
+        }
+        if (innerProduct < 0)
+        {
+            transform.Rotate(0, 0, rotation * Time.deltaTime);
+        }
+        
+    }
+
     private void Update()
     {
         // 移動処理
         var moveValue = moveAction.ReadValue<Vector2>();
         var move = new Vector2(moveValue.x, moveValue.y) * speed * Time.deltaTime;
         transform.Translate(move);
-        // ジャンプ処理
-        Debug.Log("shoot is null");
+        // shoot 処理
         if (shootAction.IsPressed()){
             ChangeState(1);
         }
@@ -58,5 +84,22 @@ public class shooter : MonoBehaviour
         {
             ChangeState(0);
         }   
+
+        LookAtPointer();
+        if (state == 1)Shoot();
+    }
+
+
+    void Shoot()
+    {
+        GameObject obj = Instantiate(bulletPrefab);
+
+        Bullet bullet = obj.GetComponent<Bullet>();
+
+        Vector2 pos = transform.position;
+        Vector2 dir = transform.up; // プレイヤーの向いている方向
+
+        bullet.Init(pos, dir, 200f);
+        Destroy(obj, 3f); // 3秒後に弾を消す
     }
 }
