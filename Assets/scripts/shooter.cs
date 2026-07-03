@@ -13,8 +13,8 @@ public class shooter : MonoBehaviour
     // 0: 待機
     // 1: 攻撃
 
-    private float speed = 10f;
-    private float rotation = 200f;
+    public float speed = 10f;
+    public float rotation = 200f;
     private InputAction moveAction;
     private InputAction shootAction;
     private InputAction lookAction;
@@ -72,17 +72,14 @@ public class shooter : MonoBehaviour
         {
             transform.Rotate(0, 0, rotation * Time.deltaTime);
         }
-        
     }
 
     private void Move()
     {
         var moveValue = moveAction.ReadValue<Vector2>();
         var move = new Vector2(moveValue.x, moveValue.y) * speed;
-
         float angle = Vector2.SignedAngle(new Vector2(0.0f,1.0f), transform.up.normalized);
-
-        rb.linearVelocity = Quaternion.Euler(0, 0, angle) * move;
+        rb.velocity = Quaternion.Euler(0, 0, angle) * move;
     }
 
     private void Update()
@@ -112,7 +109,7 @@ public class shooter : MonoBehaviour
         Vector2 pos = transform.position;
         Vector2 dir = transform.up; // プレイヤーの向いている方向
 
-        bullet.Init(pos, dir, 200f);
+        bullet.Init(pos, dir, 8f);
         Destroy(obj, 3f); // 3秒後に弾を消す
     }
 }
