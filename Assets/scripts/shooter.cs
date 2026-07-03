@@ -15,9 +15,6 @@ public class shooter : MonoBehaviour
 
     public float speed = 0f;
     public float rotation = 0f;
-    protected InputAction moveAction;
-    protected InputAction shootAction;
-    protected InputAction lookAction;
     public GameObject bulletPrefab;
 
     private Rigidbody2D rb;
@@ -64,6 +61,7 @@ public class shooter : MonoBehaviour
         }
     }
 
+    // 自身のローカル方向に合わせて移動する
     protected void Move(Vector2 dir)
     {
         var move = dir * speed;

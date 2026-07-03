@@ -3,6 +3,9 @@ using UnityEngine.InputSystem;
 
 public class Player : shooter
 {
+    protected InputAction moveAction;
+    protected InputAction shootAction;
+    protected InputAction lookAction;
     void Start()
     {
         // "Move" と "Shoot" のリファレンスを探す
