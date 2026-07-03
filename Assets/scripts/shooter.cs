@@ -13,8 +13,8 @@ public class shooter : MonoBehaviour
     // 0: 待機
     // 1: 攻撃
 
-    public float speed = 3f;
-    public float rotation = 50f;
+    public float speed = 0f;
+    public float rotation = 0f;
     protected InputAction moveAction;
     protected InputAction shootAction;
     protected InputAction lookAction;
@@ -23,7 +23,7 @@ public class shooter : MonoBehaviour
     private Rigidbody2D rb;
 
 
-    private void Start(){
+    private void Awake(){
         
         // 画像を idleに
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -45,7 +45,7 @@ public class shooter : MonoBehaviour
         }
     }
 
-    protected void LookAtPointer(Vector2 target)
+    protected void LookAt(Vector2 target)
     {
         // プレイヤーの位置とターゲットの位置の差を計算
         Vector2 diff = (target - new Vector2(transform.position.x, transform.position.y)).normalized;

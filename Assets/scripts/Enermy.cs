@@ -1,23 +1,26 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : shooter
+public class Enermy : shooter
 {
+    GameObject playerObj;
     void Start()
     {
         // "Move" と "Shoot" のリファレンスを探す
         moveAction = InputSystem.actions.FindAction("Move");
         shootAction = InputSystem.actions.FindAction("Shoot");
         lookAction = InputSystem.actions.FindAction("Look");
-        speed = 10f;
-        rotation = 200f;
+        speed = 3f;
+        rotation = 100f;
+        playerObj = GameObject.FindWithTag("Player");
     }
 
     // Update is called once per frame
     private void Update()
     {
+        Vector2 playerPosition = new Vector2(playerObj.transform.position.x, playerObj.transform.position.y);
         // 移動処理
-        Move(moveAction.ReadValue<Vector2>());
+        Move(transform.up.normalized);
         // shoot 処理
         if (shootAction.IsPressed()){
             ChangeState(1);
@@ -26,11 +29,7 @@ public class Player : shooter
         {
             ChangeState(0);
         }   
-
-        Vector2 pointerScreenPosition = lookAction.ReadValue<Vector2>();
-        Vector2 pointerPosition = Camera.main.ScreenToWorldPoint(pointerScreenPosition);
-
-        LookAt(pointerPosition);
+        LookAt(playerPosition);
         if (state == 1)Shoot();
     }
 }
