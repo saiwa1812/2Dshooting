@@ -350,10 +350,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1748144755}
   - component: {fileID: 1748144754}
-  - component: {fileID: 1748144753}
   - component: {fileID: 1748144756}
   - component: {fileID: 1748144758}
   - component: {fileID: 1748144759}
+  - component: {fileID: 1748144760}
   m_Layer: 0
   m_Name: Red
   m_TagString: Untagged
@@ -361,24 +361,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1748144753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1748144752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd4c0757471d2054bb56b931ecef1b41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterSpriteController
-  idleSprite: {fileID: -4262312582540778653, guid: 3c3eef64657fe034ca19643d1ba5d2dc, type: 3}
-  attackSprite: {fileID: 3313312509887513253, guid: 26636e915c1190e4ba46f0d4e93e1dc2, type: 3}
-  state: 1
-  speed: 10
-  rotation: 200
-  bulletPrefab: {fileID: 108022710110117606, guid: e269859ed118b494699af8b585ba4c3b, type: 3}
 --- !u!212 &1748144754
 SpriteRenderer:
   serializedVersion: 2
@@ -546,6 +528,24 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1748144760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1748144752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 081c51f7fa3888741b7a9fff25aec9a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
+  idleSprite: {fileID: -4262312582540778653, guid: 3c3eef64657fe034ca19643d1ba5d2dc, type: 3}
+  attackSprite: {fileID: 3313312509887513253, guid: 26636e915c1190e4ba46f0d4e93e1dc2, type: 3}
+  state: 0
+  speed: 3
+  rotation: 50
+  bulletPrefab: {fileID: 108022710110117606, guid: e269859ed118b494699af8b585ba4c3b, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
