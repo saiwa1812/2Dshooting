@@ -13,28 +13,26 @@ public class shooter : MonoBehaviour
     // 0: 待機
     // 1: 攻撃
 
-    private float speed = 10f;
-    private float rotation = 200f;
-    private InputAction moveAction;
-    private InputAction shootAction;
-    private InputAction lookAction;
+    public float speed = 3f;
+    public float rotation = 50f;
+    protected InputAction moveAction;
+    protected InputAction shootAction;
+    protected InputAction lookAction;
     public GameObject bulletPrefab;
 
-    public void Awake(){
-        
-    }
+    private Rigidbody2D rb;
+
 
     private void Start(){
-        // "Move" と "Shoot" のリファレンスを探す
-        moveAction = InputSystem.actions.FindAction("Move");
-        shootAction = InputSystem.actions.FindAction("Shoot");
-        lookAction = InputSystem.actions.FindAction("Look");
+        
         // 画像を idleに
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = idleSprite; 
+        // Rigidbody2D のリファレンスを取得
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    public void ChangeState(int newState){
+    protected void ChangeState(int newState){
         state = newState;
 
         switch (state){
@@ -47,18 +45,15 @@ public class shooter : MonoBehaviour
         }
     }
 
-    public void LookAtPointer()
+    protected void LookAtPointer(Vector2 target)
     {
-        Vector2 shooterPosition = new Vector2(transform.position.x,transform.position.y);
-        Vector2 pointerScreenPosition = lookAction.ReadValue<Vector2>();
-        Vector2 pointerPosition = Camera.main.ScreenToWorldPoint(pointerScreenPosition);
-        Vector2 diff = (pointerPosition - shooterPosition).normalized;
-
+        // プレイヤーの位置とターゲットの位置の差を計算
+        Vector2 diff = (target - new Vector2(transform.position.x, transform.position.y)).normalized;
+        // プレイヤーの右方向ベクトルを取得
         Vector2 rightDir = transform.right.normalized;
-
-
+        // 内積を計算して、ターゲットが右側か左側かを判定
         float innerProduct = rightDir.x*diff.x + rightDir.y*diff.y;
-
+        // 内積が正ならターゲットは右側、負なら左側
         if (innerProduct > 0)
         {
             transform.Rotate(0, 0, - rotation * Time.deltaTime);
@@ -67,30 +62,17 @@ public class shooter : MonoBehaviour
         {
             transform.Rotate(0, 0, rotation * Time.deltaTime);
         }
-        
     }
 
-    private void Update()
+    protected void Move(Vector2 dir)
     {
-        // 移動処理
-        var moveValue = moveAction.ReadValue<Vector2>();
-        var move = new Vector2(moveValue.x, moveValue.y) * speed * Time.deltaTime;
-        transform.Translate(move);
-        // shoot 処理
-        if (shootAction.IsPressed()){
-            ChangeState(1);
-        }
-        else
-        {
-            ChangeState(0);
-        }   
-
-        LookAtPointer();
-        if (state == 1)Shoot();
+        var move = dir * speed;
+        // 前方向との角度を計算して、速度ベクトルを回転させる
+        float angle = Vector2.SignedAngle(new Vector2(0.0f,1.0f), transform.up.normalized);
+        rb.velocity = Quaternion.Euler(0, 0, angle) * move;
     }
 
-
-    void Shoot()
+    protected void Shoot()
     {
         GameObject obj = Instantiate(bulletPrefab);
 
@@ -99,7 +81,7 @@ public class shooter : MonoBehaviour
         Vector2 pos = transform.position;
         Vector2 dir = transform.up; // プレイヤーの向いている方向
 
-        bullet.Init(pos, dir, 200f);
+        bullet.Init(pos, dir, 8f);
         Destroy(obj, 3f); // 3秒後に弾を消す
     }
 }
