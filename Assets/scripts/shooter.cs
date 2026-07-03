@@ -20,8 +20,11 @@ public class shooter : MonoBehaviour
     private InputAction lookAction;
     public GameObject bulletPrefab;
 
-    public void Awake(){
-        
+    private Rigidbody2D rb;
+
+    void Awake()
+    {
+
     }
 
     private void Start(){
@@ -32,9 +35,11 @@ public class shooter : MonoBehaviour
         // 画像を idleに
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = idleSprite; 
+
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    public void ChangeState(int newState){
+    private void ChangeState(int newState){
         state = newState;
 
         switch (state){
@@ -47,7 +52,7 @@ public class shooter : MonoBehaviour
         }
     }
 
-    public void LookAtPointer()
+    private void LookAtPointer()
     {
         Vector2 shooterPosition = new Vector2(transform.position.x,transform.position.y);
         Vector2 pointerScreenPosition = lookAction.ReadValue<Vector2>();
@@ -70,12 +75,20 @@ public class shooter : MonoBehaviour
         
     }
 
+    private void Move()
+    {
+        var moveValue = moveAction.ReadValue<Vector2>();
+        var move = new Vector2(moveValue.x, moveValue.y) * speed;
+
+        float angle = Vector2.SignedAngle(new Vector2(0.0f,1.0f), transform.up.normalized);
+
+        rb.linearVelocity = Quaternion.Euler(0, 0, angle) * move;
+    }
+
     private void Update()
     {
         // 移動処理
-        var moveValue = moveAction.ReadValue<Vector2>();
-        var move = new Vector2(moveValue.x, moveValue.y) * speed * Time.deltaTime;
-        transform.Translate(move);
+        Move();
         // shoot 処理
         if (shootAction.IsPressed()){
             ChangeState(1);
