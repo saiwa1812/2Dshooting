@@ -19,6 +19,8 @@ public class shooter : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    protected string damageTag = "";
+
 
     private void Awake(){
         
@@ -81,5 +83,26 @@ public class shooter : MonoBehaviour
 
         bullet.Init(pos, dir, 8f);
         Destroy(obj, 3f); // 3秒後に弾を消す
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        HandleHit(other.gameObject, damageTag);
+    }
+
+
+    private void HandleHit(GameObject hitObject, string damageTag)
+    {
+        if (hitObject == gameObject)
+        {
+            return;
+        }
+
+        var shooter = hitObject.GetComponentInParent<shooter>();
+        if (shooter != null && hitObject.CompareTag(damageTag))
+        {
+            // Destroy(gameObject);
+            Debug.Log(damageTag + " に当たりました");
+        }
     }
 }

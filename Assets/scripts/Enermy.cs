@@ -11,6 +11,8 @@ public class Enermy : shooter
         playerObj = GameObject.FindWithTag("Player");
         
         ChangeState(0);
+        // damageTag を設定
+        damageTag = "bullet-friendly";
     }
 
     // Update is called once per frame

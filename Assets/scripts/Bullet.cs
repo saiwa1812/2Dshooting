@@ -4,12 +4,15 @@ public class Bullet : MonoBehaviour
 {
     private Vector2 direction;
     private float speed;
-
     private Rigidbody2D rb;
 
-    public void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        }
     }
 
     // 初期化関数
@@ -19,12 +22,41 @@ public class Bullet : MonoBehaviour
         direction = dir.normalized;
         speed = spd;
         transform.up = direction;
+
+        if (rb != null)
+        {
+            rb.velocity = Vector2.zero;
+        }
     }
 
-    void Update()
-    {  
-        var move = new Vector2(0.0f, 1.0f) * speed;
-        float angle = Vector2.SignedAngle(new Vector2(0.0f,1.0f), direction);
-        rb.velocity = Quaternion.Euler(0, 0, angle) * move;
+    private void Update()
+    {
+        if (rb == null)
+        {
+            return;
+        }
+
+        rb.velocity = direction * speed;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        HandleHit(other.gameObject);
+    }
+
+
+    private void HandleHit(GameObject hitObject)
+    {
+        if (hitObject == gameObject)
+        {
+            return;
+        }
+
+        var shooter = hitObject.GetComponentInParent<shooter>();
+        if (shooter != null && hitObject.CompareTag("Enermy"))
+        {
+            // Debug.Log(hitObject.name + " に当たりました");
+            Destroy(gameObject);
+        }
     }
 }

@@ -6,6 +6,7 @@ public class Player : shooter
     protected InputAction moveAction;
     protected InputAction shootAction;
     protected InputAction lookAction;
+
     void Start()
     {
         // "Move" と "Shoot" のリファレンスを探す
@@ -14,6 +15,8 @@ public class Player : shooter
         lookAction = InputSystem.actions.FindAction("Look");
         speed = 10f;
         rotation = 200f;
+        // damageTag を設定
+        damageTag = "bullet-enermy";
     }
 
     // Update is called once per frame
