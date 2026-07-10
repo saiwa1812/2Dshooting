@@ -6,6 +6,8 @@ public class Bullet : MonoBehaviour
     private float speed;
     private Rigidbody2D rb;
 
+    public int damage = 1;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -47,6 +49,7 @@ public class Bullet : MonoBehaviour
 
     private void HandleHit(GameObject hitObject)
     {
+        // 他の弾や自分自身との衝突は無視する
         if (hitObject == gameObject)
         {
             return;

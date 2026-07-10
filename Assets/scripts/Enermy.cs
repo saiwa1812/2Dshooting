@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class Enermy : shooter
 {
     GameObject playerObj;
+
     void Start()
     {
         speed = 3f;
@@ -13,6 +14,9 @@ public class Enermy : shooter
         ChangeState(0);
         // damageTag を設定
         damageTag = "bullet-friendly";
+        self = gameObject;
+
+        hitPoint = 20;
     }
 
     // Update is called once per frame
@@ -20,7 +24,7 @@ public class Enermy : shooter
     {
         Vector2 playerPosition = new Vector2(playerObj.transform.position.x, playerObj.transform.position.y);
         // 移動処理
-        Move(new Vector2(0, 1));
+        Move(new Vector2(1, 0.3f));
         // shoot 処理
         // Debug.Log(transform.up.normalized);
         LookAt(playerPosition);

@@ -16,11 +16,15 @@ public class shooter : MonoBehaviour
     public float speed = 0f;
     public float rotation = 0f;
     public GameObject bulletPrefab;
+    // 自分のゲームオブジェクトのリファレンスを保持する変数
+    protected GameObject self = null;
 
     private Rigidbody2D rb;
 
     protected string damageTag = "";
 
+    // ダメージ判定のパラメータ
+    protected int hitPoint = 0;
 
     private void Awake(){
         
@@ -81,7 +85,7 @@ public class shooter : MonoBehaviour
         Vector2 pos = transform.position;
         Vector2 dir = transform.up; // プレイヤーの向いている方向
 
-        bullet.Init(pos, dir, 8f);
+        bullet.Init(pos, dir, 50f);
         Destroy(obj, 3f); // 3秒後に弾を消す
     }
 
@@ -93,16 +97,15 @@ public class shooter : MonoBehaviour
 
     private void HandleHit(GameObject hitObject, string damageTag)
     {
-        if (hitObject == gameObject)
+        if (hitObject.CompareTag(damageTag))
         {
-            return;
-        }
-
-        var shooter = hitObject.GetComponentInParent<shooter>();
-        if (shooter != null && hitObject.CompareTag(damageTag))
-        {
-            // Destroy(gameObject);
-            Debug.Log(damageTag + " に当たりました");
+            Debug.Log(damageTag + "に当たりました");
+            hitPoint -= hitObject.GetComponent<Bullet>().damage;
+            if (hitPoint <= 0)
+            {
+                Debug.Log(gameObject.name + " が破壊されました");
+                Destroy(self);
+            }
         }
     }
 }

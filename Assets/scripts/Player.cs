@@ -7,6 +7,7 @@ public class Player : shooter
     protected InputAction shootAction;
     protected InputAction lookAction;
 
+
     void Start()
     {
         // "Move" と "Shoot" のリファレンスを探す
@@ -17,6 +18,9 @@ public class Player : shooter
         rotation = 200f;
         // damageTag を設定
         damageTag = "bullet-enermy";
+        self = gameObject;
+
+        hitPoint = 100;
     }
 
     // Update is called once per frame
