@@ -50,7 +50,7 @@ public class Bullet : MonoBehaviour
     private void HandleHit(GameObject hitObject)
     {
         // 他の弾や自分自身との衝突は無視する
-        if (hitObject == gameObject)
+        if (hitObject == gameObject || hitObject == null)
         {
             return;
         }

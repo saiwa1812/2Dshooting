@@ -22,6 +22,10 @@ public class Enermy : shooter
     // Update is called once per frame
     private void Update()
     {
+        if (self == null)
+        {
+            return;
+        }     
         Vector2 playerPosition = new Vector2(playerObj.transform.position.x, playerObj.transform.position.y);
         // 移動処理
         Move(new Vector2(1, 0.3f));

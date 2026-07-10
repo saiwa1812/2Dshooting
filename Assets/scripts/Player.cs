@@ -38,6 +38,7 @@ public class Player : shooter
         }   
 
         Vector2 pointerScreenPosition = lookAction.ReadValue<Vector2>();
+        // スクリーン座標をワールド座標に変換
         Vector2 pointerPosition = Camera.main.ScreenToWorldPoint(pointerScreenPosition);
 
         LookAt(pointerPosition);
